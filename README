@@ -1,0 +1,28 @@
+适配pluginx来做paypal的扩展
+1:注册账号
+https://github.com/liyonghelpme/cocos2dxPaypalPlugin.git
+2:建立app
+
+java 层提供接口 并且初始化java层代码
+c++ 层提供接口  并且初始化c++ 层代码
+
+
+android 相关代码：
+3:需要 两个jar包
+PayPalAndroidSDK.jar
+libPluginProtocol.jar
+
+4:增加PayPal java类
+
+5:修改java 中的Activity 类
+
+6:修改android mk 文件和android xml 文件
+
+Classes中相关代码
+7:PayPal.h .cpp 代码
+8:plugins 里面的代码  支付相关的插件实现代码
+
+
+使用样例：
+参考HelloWorldScene 里面的 preOne函数 
+点击购买物品， 调用相关接口
