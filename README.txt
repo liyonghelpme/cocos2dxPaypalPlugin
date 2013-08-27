@@ -1,34 +1,8 @@
-适配pluginx来做paypal的扩展
-1:注册账号
-https://github.com/liyonghelpme/cocos2dxPaypalPlugin.git
-2:建立app
-
-java 层提供接口 并且初始化java层代码
-c++ 层提供接口  并且初始化c++ 层代码
-
-
-android 相关代码：
-3:需要 两个jar包
-PayPalAndroidSDK.jar
-libPluginProtocol.jar
-
-4:增加PayPal java类
-
-5:修改java 中的Activity 类
-
-6:修改android mk 文件和android xml 文件
-
-Classes中相关代码
-7:PayPal.h .cpp 代码
-8:plugins 里面的代码  支付相关的插件实现代码
-
-
-使用样例：
-参考HelloWorldScene 里面的 preOne函数 
-点击购买物品， 调用相关接口
-
 
 新版本的PayPal 原理
+
+客户端流程:
+主要查看 Paypal.java MyWeb.java 文件
 
 1.客户端lua脚本 在购买水晶的时候 首先向我们服务器申请一个订单号  genRecordId    {invoice=invoice}
     这个订单包含有用户信息 和购买水晶的信息
@@ -45,6 +19,21 @@ Classes中相关代码
 6.用户支付成功PayPal 将调用我方后台接口， ipn.php, ipn将会将成功记录插入到数据库里面, 便于客户端验证是否购买成功 
     checkBuyRecord uid=? invoice=?
 
+后台流程:
+主要查看 app.py  
+页面 charge.php success.php ipn.php  
+数据库 buyRecord record 
+
+1.客户端请求 charge.php 页面 传入相应的参数 item_name商品名称 amount 价格 currency_code 货币 invoice 订单号 
+
+2.支付成功 paypal自动跳转到 success.php 页面, 同时后台通知 ipn.php 页面
+
+3.用户取消 跳转到 cancel.html 页面
+
+
+
+
+
 
 
 出错:
@@ -58,3 +47,6 @@ Classes中相关代码
 
 补救措施2:
     可以在收到IPN 消息的时候 向用户客户端发送一条消息
+
+
+
