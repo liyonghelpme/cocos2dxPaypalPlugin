@@ -32,6 +32,7 @@ Classes中相关代码
 
 1.客户端lua脚本 在购买水晶的时候 首先向我们服务器申请一个订单号  genRecordId    {invoice=invoice}
     这个订单包含有用户信息 和购买水晶的信息
+    genRecordId  uid=? kind=?
     
 2.接着将订单号以及产品名称信息 价格 货币单位 传给 java层:  PaypalJava 中 payForProduct 
 
@@ -42,9 +43,12 @@ Classes中相关代码
 5.如果用户在没有跳转到Success 页面就关闭掉WebView， 则通过检测后台服务器状态 checkBuyRecord 判定是否购买成功
 
 6.用户支付成功PayPal 将调用我方后台接口， ipn.php, ipn将会将成功记录插入到数据库里面, 便于客户端验证是否购买成功 
+    checkBuyRecord uid=? invoice=?
 
 
-出错补救措施:
+
+出错:
+补救措施1:
     用户提前退出了WebView 导致PayPal 扣款成功 但是 没有增加水晶
     通过检测数据库，可以找到用户购买水晶记录，以及该记录状态 = 0
     IPN.php 插入数据库记录, 表示订单完成
@@ -52,3 +56,5 @@ Classes中相关代码
     
     将水晶发给用户之后, 记录状态 = 2 即可
 
+补救措施2:
+    可以在收到IPN 消息的时候 向用户客户端发送一条消息
