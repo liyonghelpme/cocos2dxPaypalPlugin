@@ -50,11 +50,21 @@ void HelloWorld::preOne(CCObject *send) {
         CCLog("finish config");
         paypal->setResultListener(result);
     }
+    //从服务器获取一个 invoice 号码
+    /*
+    CCHttpRequest *request = new CCHttpRequest();
+    //用户的uid 和 购买的商品编号
+    request->setUrl("http://www.caesarsgame.com:9070/genRecordId?uid=1&kind=0");
+    request->setRequestType(CCHttpRequest::kHttpGet);
+    request->setResponseCallback(this, httpresponse_selector());
+    */
+
     TProductInfo info;
     info["PAYER_ID"] = "xiaoming";
     info["number"] = "100.2";
     info["currency"] = "USD";
     info["productName"] = "crystal0";
+    //info["invoice"] = "";
     paypal->payForProduct(info);
 
     return;

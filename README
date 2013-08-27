@@ -26,3 +26,29 @@ Classes中相关代码
 使用样例：
 参考HelloWorldScene 里面的 preOne函数 
 点击购买物品， 调用相关接口
+
+
+新版本的PayPal 原理
+
+1.客户端lua脚本 在购买水晶的时候 首先向我们服务器申请一个订单号  genRecordId    {invoice=invoice}
+    这个订单包含有用户信息 和购买水晶的信息
+    
+2.接着将订单号以及产品名称信息 价格 货币单位 传给 java层:  PaypalJava 中 payForProduct 
+
+3.PaypalJava 打开一个新的WebView 页面将订单号和产品名称 以Intent Extra数据方式传递给它
+
+4.用户支付成功将会跳转到我方成功页面 WebView 根据跳转到成功页面 来判定支付成功， 关闭webview的时候 将会客户端 支付成功
+
+5.如果用户在没有跳转到Success 页面就关闭掉WebView， 则通过检测后台服务器状态 checkBuyRecord 判定是否购买成功
+
+6.用户支付成功PayPal 将调用我方后台接口， ipn.php, ipn将会将成功记录插入到数据库里面, 便于客户端验证是否购买成功 
+
+
+出错补救措施:
+    用户提前退出了WebView 导致PayPal 扣款成功 但是 没有增加水晶
+    通过检测数据库，可以找到用户购买水晶记录，以及该记录状态 = 0
+    IPN.php 插入数据库记录, 表示订单完成
+    设定购买水晶记录 状态 = 1
+    
+    将水晶发给用户之后, 记录状态 = 2 即可
+

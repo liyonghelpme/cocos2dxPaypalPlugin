@@ -15,10 +15,13 @@ import com.paypal.android.sdk.payments.PaymentActivity;
 import com.paypal.android.sdk.payments.PaymentConfirmation;
 
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.util.Log;
+import android.webkit.WebView;
+import android.widget.FrameLayout;
 
 public class PaypalJava implements IAPAdapter {
 	private static Handler mHandler;
@@ -28,6 +31,7 @@ public class PaypalJava implements IAPAdapter {
 	private boolean debug=true;
 	private static Intent intent = null;
 	private static PaypalJava mAdapter = null;
+	public static int Result = 0;
 	//HelloLua Activity
 	public PaypalJava(Context context) {
 		mContext = (Activity) context;
@@ -53,7 +57,8 @@ public class PaypalJava implements IAPAdapter {
 					intent.putExtra(PaymentActivity.EXTRA_PAYPAL_ENVIRONMENT, PaymentActivity.ENVIRONMENT_LIVE);
 				}
 				intent.putExtra(PaymentActivity.EXTRA_CLIENT_ID, CLIENT_ID);
-				mContext.startService(intent);
+				ComponentName cn = mContext.startService(intent);
+				Log.e("Paypal", "ComponentName "+cn);
 			} else {
 				Log.e("Paypal", "重复配置！");
 			}
@@ -76,6 +81,14 @@ public class PaypalJava implements IAPAdapter {
 		String currency = info.get("currency");
 		String payerID = info.get("PAYER_ID");
 		String productName = info.get("productName");
+		String num = info.get("number");
+		//下层传来了这个invoice账号
+		String iv = info.get("invoice");
+		int invoice = 0;
+		if(iv != null) {
+			invoice = Integer.parseInt(iv);
+		}
+		
 		PayPalPayment payment = new PayPalPayment(v, currency, productName);
 		
 		Intent intent = new Intent(mContext, PaymentActivity.class);
@@ -92,8 +105,20 @@ public class PaypalJava implements IAPAdapter {
 		intent.putExtra(PaymentActivity.EXTRA_PAYER_ID, payerID);
 		intent.putExtra(PaymentActivity.EXTRA_RECEIVER_EMAIL, RECEIVER_EMAIL);
 		intent.putExtra(PaymentActivity.EXTRA_PAYMENT, payment);
+		//mContext.startActivityForResult(intent, 0);
 		
-		mContext.startActivityForResult(intent, 0);
+		//Intent uiIntent = new Intent(mContext, PayPalUI.class);
+		//mContext.startActivityForResult(uiIntent, 0);
+		
+		//产品名称订单编号
+		Intent wi = new Intent(mContext, MyWeb.class);
+		wi.putExtra("invoice", invoice);
+		wi.putExtra("item_name", productName);
+		wi.putExtra("amount", num);
+		wi.putExtra("currency_code", currency);
+		
+		mContext.startActivityForResult(wi, 0);
+		
 	}
 	public void onPayResult(int requestCode, int resultCode, Intent data){
 		Log.d("payment Example", " "+Activity.RESULT_OK+" "+Activity.RESULT_CANCELED);
