@@ -63,7 +63,9 @@ void HelloWorld::preOne(CCObject *send) {
     info["PAYER_ID"] = "xiaoming";
     info["number"] = "100.2";
     info["currency"] = "USD";
-    info["productName"] = "crystal0";
+    //info["productName"] = "crystal0";
+
+    info["productName"] = "com.liyong.test2";
     //info["invoice"] = "";
     paypal->payForProduct(info);
 

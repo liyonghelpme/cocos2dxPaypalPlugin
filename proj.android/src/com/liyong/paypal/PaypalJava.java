@@ -9,6 +9,7 @@ import org.cocos2dx.plugin.InterfaceIAP;
 import org.cocos2dx.plugin.PluginWrapper;
 import org.json.JSONException;
 
+import com.liyong.iap.IapActivity;
 import com.paypal.android.sdk.payments.PayPalPayment;
 import com.paypal.android.sdk.payments.PayPalService;
 import com.paypal.android.sdk.payments.PaymentActivity;
@@ -38,6 +39,7 @@ public class PaypalJava implements IAPAdapter {
 		HelloCpp hl = (HelloCpp)mContext;
 		hl.paypalJava = this;
 		mAdapter = this;
+		Log.e("PayPal", "init PayPal Java finish");
 	}
 
 	@Override
@@ -105,12 +107,14 @@ public class PaypalJava implements IAPAdapter {
 		intent.putExtra(PaymentActivity.EXTRA_PAYER_ID, payerID);
 		intent.putExtra(PaymentActivity.EXTRA_RECEIVER_EMAIL, RECEIVER_EMAIL);
 		intent.putExtra(PaymentActivity.EXTRA_PAYMENT, payment);
+		
 		//mContext.startActivityForResult(intent, 0);
 		
 		//Intent uiIntent = new Intent(mContext, PayPalUI.class);
 		//mContext.startActivityForResult(uiIntent, 0);
 		
 		//²úÆ·Ãû³Æ¶©µ¥±àºÅ
+		/*
 		Intent wi = new Intent(mContext, MyWeb.class);
 		wi.putExtra("invoice", invoice);
 		wi.putExtra("item_name", productName);
@@ -119,9 +123,15 @@ public class PaypalJava implements IAPAdapter {
 		
 		mContext.startActivityForResult(wi, 0);
 		
+		*/
+		
+		Intent iap = new Intent(mContext, IapActivity.class);
+		iap.putExtra("productName", productName);
+		mContext.startActivityForResult(iap, 0);
 	}
 	public void onPayResult(int requestCode, int resultCode, Intent data){
-		Log.d("payment Example", " "+Activity.RESULT_OK+" "+Activity.RESULT_CANCELED);
+		Log.d("payment Example", "onPayResult "+Activity.RESULT_OK+" "+Activity.RESULT_CANCELED);
+		Log.d("payment Example", "requestCode resultCode "+requestCode+" "+resultCode+" "+data);
 		if(resultCode == Activity.RESULT_OK) {
 			PaymentConfirmation confirm = data.getParcelableExtra(PaymentActivity.EXTRA_RESULT_CONFIRMATION);
 			if(confirm != null) {
@@ -133,7 +143,7 @@ public class PaypalJava implements IAPAdapter {
 					InterfaceIAP.onPayResult(mAdapter, InterfaceIAP.PAYRESULT_FAIL, "¹ºÂòÊ§°Ü£¡");
 				}
 			} else {
-				Log.d("payment Example", "success");
+				Log.d("payment Example", "purchase success");
 				InterfaceIAP.onPayResult(mAdapter, InterfaceIAP.PAYRESULT_SUCCESS, "ÎÞÍøÂç¹ºÂò³É¹¦£¡");
 			}
 		} else if(resultCode == Activity.RESULT_CANCELED) {

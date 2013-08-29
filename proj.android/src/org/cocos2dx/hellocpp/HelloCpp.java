@@ -75,7 +75,7 @@ public class HelloCpp extends Cocos2dxActivity{
 		super.onDestroy();
 	}
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		Log.d("Paypal", "onActivityResult "+requestCode+" "+resultCode);
+		Log.d("Paypal HelloCpp", "onActivityResult "+requestCode+" "+resultCode);
 		paypalJava.onPayResult(requestCode, resultCode, data);
 		
 	}

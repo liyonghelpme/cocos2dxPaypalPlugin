@@ -34,8 +34,6 @@
 
 
 
-
-
 出错:
 补救措施1:
     用户提前退出了WebView 导致PayPal 扣款成功 但是 没有增加水晶
@@ -49,4 +47,19 @@
     可以在收到IPN 消息的时候 向用户客户端发送一条消息
 
 
+
+Google IAB 支付流程
+
+1.HelloWorldScene.cpp  productName 中使用 在play.google.com/apps/publish 上面注册的商品ID
+2.PaypalJava.java   payForProduct 时候启动IabActivity  并且传入商品的ID
+3.IapActivity.java  调用utils 里面的IabHelper 类的接口: 
+    startSetup  连接手机上的 google play 服务
+    queryInventoryAsync 查询google play 上商品信息
+    launchPurchaseFlow 启动购买流程 
+    consumeAsync 购买成功商品之后，再调用接口消费掉商品，这样用户才能再次购买
+
+
+
+4.使用liyonghelpme1@gmail.com 作为支付测试账号  
+5.手机上面的 google play 必须使用 vpn 连接 （翻越vpn免费版本）, 使用上面账号登陆 
 
