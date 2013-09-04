@@ -68,10 +68,12 @@ Amazon IAB 支付流程：
 1.测试时 在sd卡 根出 放置文件amazon.sdktester.json 文件
 2.安装 AmazonSDKTester.apk 文件
 3.修改代码位置
-4.增加库文件 in-app-purchase
+4.增加库文件 
+in-app-purchase
 HelloCpp.java
 PayPalJava.java
 AmazonIAP.java
+xml 配置文件
 
 
 
