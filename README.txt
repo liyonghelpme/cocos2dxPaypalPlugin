@@ -63,3 +63,14 @@ Google IAB 支付流程
 4.使用liyonghelpme1@gmail.com 作为支付测试账号  
 5.手机上面的 google play 必须使用 vpn 连接 （翻越vpn免费版本）, 使用上面账号登陆 
 
+
+Amazon IAB 支付流程：
+1.测试时 在sd卡 根出 放置文件amazon.sdktester.json 文件
+2.安装 AmazonSDKTester.apk 文件
+3.修改代码位置
+HelloCpp.java
+PayPalJava.java
+AmazonIAP.java
+
+
+

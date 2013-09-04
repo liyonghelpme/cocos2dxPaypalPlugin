@@ -55,6 +55,19 @@
 <activity android:name="com.liyong.paypal.PayPalUI"></activity>
 <activity android:name="com.liyong.paypal.MyWeb"></activity>
 <activity android:name="com.liyong.iap.IapActivity"></activity>
+
+
+    <receiver android:name = "com.amazon.inapp.purchasing.ResponseReceiver" >
+ 
+        <intent-filter>
+ 
+            <action android:name = "com.amazon.inapp.purchasing.NOTIFY"
+ 
+                    android:permission = "com.amazon.inapp.purchasing.Permission.NOTIFY"></action>
+ 
+        </intent-filter>
+ 
+    </receiver>
         
     </application>
     <supports-screens android:largeScreens="true"

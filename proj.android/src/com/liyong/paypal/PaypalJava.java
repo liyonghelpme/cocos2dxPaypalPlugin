@@ -1,7 +1,9 @@
 package com.liyong.paypal;
 
 import java.math.BigDecimal;
+import java.util.HashSet;
 import java.util.Hashtable;
+import java.util.Set;
 
 import org.cocos2dx.hellocpp.HelloCpp;
 import org.cocos2dx.plugin.InterfaceIAP.IAPAdapter;
@@ -9,6 +11,7 @@ import org.cocos2dx.plugin.InterfaceIAP;
 import org.cocos2dx.plugin.PluginWrapper;
 import org.json.JSONException;
 
+import com.amazon.inapp.purchasing.PurchasingManager;
 import com.liyong.iap.IapActivity;
 import com.paypal.android.sdk.payments.PayPalPayment;
 import com.paypal.android.sdk.payments.PayPalService;
@@ -125,9 +128,20 @@ public class PaypalJava implements IAPAdapter {
 		
 		*/
 		
+		/*
 		Intent iap = new Intent(mContext, IapActivity.class);
 		iap.putExtra("productName", productName);
 		mContext.startActivityForResult(iap, 0);
+		*/
+		
+		//获取 可购买的物品
+		
+		Set<String> s = new HashSet<String>();
+		s.add("com.liyong.crystal0");
+		PurchasingManager.initiateItemDataRequest(s);
+		
+		String requestId = PurchasingManager.initiatePurchaseRequest("com.liyong.crystal0");
+		Log.e("IAP", "requestID "+requestId);
 	}
 	public void onPayResult(int requestCode, int resultCode, Intent data){
 		Log.d("payment Example", "onPayResult "+Activity.RESULT_OK+" "+Activity.RESULT_CANCELED);

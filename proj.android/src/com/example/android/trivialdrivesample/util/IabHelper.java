@@ -525,6 +525,8 @@ public class IabHelper {
             int r = queryPurchases(inv, ITEM_TYPE_INAPP);
             if (r != BILLING_RESPONSE_RESULT_OK) {
                 throw new IabException(r, "Error refreshing inventory (querying owned items).");
+            } else {
+            	Log.e("IAP", "purchase "+r);
             }
 
             if (querySkuDetails) {

@@ -33,6 +33,7 @@ public class IapActivity extends Activity{
 	Handler handler;
 	int state = 0;
 	String productName;
+	Purchase purYet;
 	
 	IabHelper.QueryInventoryFinishedListener list = new IabHelper.QueryInventoryFinishedListener(){
 		
@@ -42,17 +43,18 @@ public class IapActivity extends Activity{
 			if(result.isFailure()) {
 				Log.e("IAP", "Query Failed");
 			}
-			String price = inv.getSkuDetails("com.liyong.test2").getPrice();
-			Log.e("IAP", "price"+price);
+			//String price = inv.getSkuDetails("com.liyong.test2").getPrice();
+			//Log.e("IAP", "price"+price);
 			
-			Purchase pur = inv.getPurchase(productName);
+			//Purchase pur = inv.getPurchase(productName);
 			
 			//开始消费 就不能轻易退出了
 			
 			//如果有购买过相关产品的 则消耗掉
-			if(pur != null) {
+			if(inv.hasPurchase(productName)) {
 				Log.e("IAP", "purchase yet please consume it now");
 				state = 1;
+				Purchase pur = inv.getPurchase(productName);
 				iabHelper.consumeAsync(pur, consumeListener);
 			} else {
 			//user id 
@@ -68,17 +70,29 @@ public class IapActivity extends Activity{
 		@Override
 		public void onIabPurchaseFinished(IabResult result, Purchase info) {
 			Log.e("IAP", "pucharse finished "+result+" "+info);
-			// TODO Auto-generated method stub
-			if(result.isFailure()) {
-				Log.e("IAP", "purchase failed");
-				//iabHelper.consumeAsync(info, consumeListener);
-			//购买完就消耗掉该产品
-			} else {
-				Log.e("IAP", "purchase suc "+info);
-				//购买成功 必须等待消费掉才能退出
-				state = 1;
-				iabHelper.consumeAsync(info, consumeListener);
+			int resCode = result.getResponse();
 			
+			//检测购买的商品已经 拥有了 则消费掉
+			if(resCode == IabHelper.BILLING_RESPONSE_RESULT_ITEM_ALREADY_OWNED) {
+				//state = 1;
+				//Purchase pur = new Purchase(IabHelper.ITEM_TYPE_INAPP, "ui d");
+				//iabHelper.consumeAsync(info, consumeListener);
+				Log.e("IAP", "Already owned");
+				//iabHelper.consumeAsync(productName, consumeListener);
+				//how to get purchase data and purchase signature
+			} else {
+				// TODO Auto-generated method stub
+				if(result.isFailure()) {
+					Log.e("IAP", "purchase failed");
+					//iabHelper.consumeAsync(info, consumeListener);
+				//购买完就消耗掉该产品
+				} else {
+					Log.e("IAP", "purchase suc "+info);
+					//购买成功 必须等待消费掉才能退出
+					state = 1;
+					iabHelper.consumeAsync(info, consumeListener);
+				
+				}
 			}
 		}
 	};
@@ -179,7 +193,7 @@ public class IapActivity extends Activity{
 			@Override
 			public void onIabSetupFinished(IabResult result) {
 				Log.e("IAP", result.toString());
-				// TODO Auto-generated method stub
+				// TODO Auto-generated method stub 
 				if(!result.isSuccess()) {
 					Log.e("IAP", "setup failed");
 				} else {
@@ -188,6 +202,7 @@ public class IapActivity extends Activity{
 					goods.add("com.liyong.test2");
 					//获取物品信息
 					iabHelper.queryInventoryAsync(true, goods, list);
+					
 				}
 			}
 		});
@@ -226,8 +241,13 @@ public class IapActivity extends Activity{
 	//purchaseFlow 需要向Activity 再由Activity 处理结果给iabHelper
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		
+		//if(resultCode == Activity.RESULT_CANCELED) {
 		Log.e("IAP", "onActivityResult "+requestCode+" "+resultCode+" "+data);
-		iabHelper.handleActivityResult(requestCode, resultCode, data);
+		if(!iabHelper.handleActivityResult(requestCode, resultCode, data)) {
+			super.onActivityResult(requestCode, resultCode, data);
+		}
+		//} 
 		
 	}
 }

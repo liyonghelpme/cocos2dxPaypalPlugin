@@ -31,9 +31,11 @@ import org.cocos2dx.lib.Cocos2dxActivity;
 import org.cocos2dx.lib.Cocos2dxGLSurfaceView;
 import org.cocos2dx.plugin.PluginWrapper;
 
+import com.amazon.inapp.purchasing.PurchasingManager;
 import com.google.ads.AdRequest;
 import com.google.ads.AdSize;
 import com.google.ads.AdView;
+import com.liyong.iap.AmazonIAP;
 import com.paypal.android.MEP.CheckoutButton;
 import com.paypal.android.MEP.PayPal;
 import com.paypal.android.sdk.payments.PayPalService;
@@ -61,7 +63,11 @@ public class HelloCpp extends Cocos2dxActivity{
 	
 	public com.liyong.paypal.PaypalJava paypalJava;
 
-	
+	@Override
+	protected void onStart() {
+		super.onStart();
+		PurchasingManager.registerObserver(new AmazonIAP(this));
+	}
 	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		PluginWrapper.init(this);
