@@ -77,3 +77,9 @@ xml 配置文件
 
 
 
+Google IAP 没有安装时的bug修正:
+
+IapActivity.java 中 当检测到没有google的服务的时候，将错误信息装入data中
+PaypalJava.java 中 检测到CANCELED 并且服务不可用，则返回FAIL, message是  "not available"
+
+检测到Fail 且msg "not available" 通知用户不可用即可

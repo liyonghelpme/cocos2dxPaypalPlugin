@@ -128,20 +128,23 @@ public class PaypalJava implements IAPAdapter {
 		
 		*/
 		
-		/*
+		
 		Intent iap = new Intent(mContext, IapActivity.class);
 		iap.putExtra("productName", productName);
 		mContext.startActivityForResult(iap, 0);
-		*/
+		
 		
 		//获取 可购买的物品
 		
+		/*
+		 *Amazon
 		Set<String> s = new HashSet<String>();
 		s.add("com.liyong.crystal0");
 		PurchasingManager.initiateItemDataRequest(s);
 		
 		String requestId = PurchasingManager.initiatePurchaseRequest("com.liyong.crystal0");
 		Log.e("IAP", "requestID "+requestId);
+		*/
 	}
 	public void onPayResult(int requestCode, int resultCode, Intent data){
 		Log.d("payment Example", "onPayResult "+Activity.RESULT_OK+" "+Activity.RESULT_CANCELED);
@@ -161,7 +164,14 @@ public class PaypalJava implements IAPAdapter {
 				InterfaceIAP.onPayResult(mAdapter, InterfaceIAP.PAYRESULT_SUCCESS, "无网络购买成功！");
 			}
 		} else if(resultCode == Activity.RESULT_CANCELED) {
-			InterfaceIAP.onPayResult(mAdapter, InterfaceIAP.PAYRESULT_CANCEL, "小朋友取消了购买!");
+			boolean ava = data.getBooleanExtra("available", true);
+			
+			Log.e("IAP", "cancel "+data+" "+ava+" "+data.getBooleanExtra("what", true));
+			//服务不可用
+			if(!ava) {
+				InterfaceIAP.onPayResult(mAdapter, InterfaceIAP.PAYRESULT_FAIL, "not available");
+			}else
+				InterfaceIAP.onPayResult(mAdapter, InterfaceIAP.PAYRESULT_CANCEL, "小朋友取消了购买!");
 			Log.i("Example", "user canceled");
 		} else if(resultCode == PaymentActivity.RESULT_PAYMENT_INVALID) {
 			InterfaceIAP.onPayResult(mAdapter, InterfaceIAP.PAYRESULT_FAIL, "购买失败！");

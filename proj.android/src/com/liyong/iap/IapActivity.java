@@ -34,6 +34,7 @@ public class IapActivity extends Activity{
 	int state = 0;
 	String productName;
 	Purchase purYet;
+	private boolean conSuc = false;
 	
 	IabHelper.QueryInventoryFinishedListener list = new IabHelper.QueryInventoryFinishedListener(){
 		
@@ -196,7 +197,15 @@ public class IapActivity extends Activity{
 				// TODO Auto-generated method stub 
 				if(!result.isSuccess()) {
 					Log.e("IAP", "setup failed");
+					//设置失败 向客户端发送失败信号
+					Intent data = new Intent();
+					data.putExtra("available", false);
+					//data.putExtra("what", false);
+					
+					act.setResult(Activity.RESULT_CANCELED, data);
+					act.finish();
 				} else {
+					conSuc = true;
 					List<String> goods = new ArrayList<String>();
 					goods.add("com.liyong.test1");
 					goods.add("com.liyong.test2");
@@ -208,14 +217,12 @@ public class IapActivity extends Activity{
 		});
 			
 		
-		
-		
 	}
 	
 	protected void onDestroy(){
 		super.onDestroy();
 		
-		if(iabHelper != null) {
+		if(iabHelper != null && conSuc) {
 			iabHelper.dispose();
 		}
 		iabHelper = null;

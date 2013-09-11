@@ -56,8 +56,8 @@
 <activity android:name="com.liyong.paypal.MyWeb"></activity>
 <activity android:name="com.liyong.iap.IapActivity"></activity>
 
-
-    <receiver android:name = "com.amazon.inapp.purchasing.ResponseReceiver" >
+	
+    <!-- receiver android:name = "com.amazon.inapp.purchasing.ResponseReceiver" >
  
         <intent-filter>
  
@@ -67,7 +67,16 @@
  
         </intent-filter>
  
-    </receiver>
+    </receiver -->
+    
+    
+    <receiver android:name="com.getjar.sdk.rewards.GetJarReceiver">
+            <intent-filter>
+                <action android:name="com.android.vending.billing.IN_APP_NOTIFY" />
+                <action android:name="com.android.vending.billing.RESPONSE_CODE" />
+                <action android:name="com.android.vending.billing.PURCHASE_STATE_CHANGED" />
+            </intent-filter>
+     </receiver>
         
     </application>
     <supports-screens android:largeScreens="true"
