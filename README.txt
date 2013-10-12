@@ -1,4 +1,3 @@
-
 新版本的PayPal 原理
 
 客户端流程:
@@ -50,3 +49,7 @@
 
 
 
+包括：
+google play
+amazon IAP
+paypal
